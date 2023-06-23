@@ -127,8 +127,8 @@ function AddScoreNodes() {
      main_container.appendChild(div_holder);
 
      //Change display-flex of main-container
-     main_container.style.cssText = "justify-content: flex-start; align-items: center; gap: 300px; width:100%";
-     div_holder.style.cssText = "justify-content: space-around; width: 100%; display: flex; border: 5px solid red";
+     main_container.style.cssText = "justify-content: flex-start; border: none; align-items: center; gap: 300px; width:100%";
+     div_holder.style.cssText = "justify-content: space-around; width: 100%; display: flex";
 }
 
 function AddChoices() {
