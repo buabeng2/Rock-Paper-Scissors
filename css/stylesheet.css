@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+}
+
+body {
+    height: 100vh;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Press Start 2P', cursive;
+    gap: 20px;
+}
+
+
+.header, .footer {
+    height: 50px;
+    padding: 20px;
+}
+
+.main-content {
+    border: 3px white solid;
+    flex: auto;
+    width: 800px;
+    align-self:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.main-content p {
+    text-align: center;
+    line-height: 20px;
+}
+
+#play-button {
+    width: 100px;
+    height: 50px;
+    font-family: 'Press Start 2P', cursive; 
+}
