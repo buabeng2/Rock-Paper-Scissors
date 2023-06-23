@@ -90,7 +90,7 @@ function Transition() {
     setTimeout(removeAudio, 8000);
     //Take out the nodes once the music is finished
     setTimeout(removeAllChildNodes, 6000);
-    setTimeout(GameUi, 8000);
+    setTimeout(GameUi, 6000);
 }
 
 function AddScoreNodes() {
