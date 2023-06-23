@@ -12,6 +12,9 @@ body {
     flex-direction: column;
     font-family: 'Press Start 2P', cursive;
     gap: 20px;
+    background-image: url(https://cdn.dribbble.com/users/976907/screenshots/4879640/dribbble_13.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 

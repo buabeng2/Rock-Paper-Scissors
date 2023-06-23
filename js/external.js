@@ -11,11 +11,14 @@ function getComputerChoice() {
 }
 
 function playRound(event) {
+    //Here are the choices
+    const player_lowercase = event.target.textContent.toLowerCase();
+    console.log(player_lowercase);
+    const computer_lowercase = getComputerChoice().toLowerCase();
 
-    const playerSelection = event.target.innerHTML;
-    const computerSelection = getComputerChoice();
-    const player_lowercase = playerSelection.toLowerCase();
-    const computer_lowercase = computerSelection.toLowerCase();
+    //Remove old description
+    //Add description
+    AddRoundResult(player_lowercase, computer_lowercase);
     switch (player_lowercase) {
         case "rock":
             if (computer_lowercase == "scissors") {
@@ -48,6 +51,10 @@ function playRound(event) {
             }
         break;
     }
+    if (GameOver(event)) {
+        RemoveListeners();
+        return;
+    }
 }
 function changeScore(event, result) {
     if (result == "won") {
@@ -61,11 +68,84 @@ function changeScore(event, result) {
     }
 }
 
+function AddRoundResult(playerChoice, computerChoice) {
+    const main_container = document.querySelector(".main-content");
+    let result_announcement = document.createElement("p");
+    result_announcement.classList.add("results");
+    switch (playerChoice) {
+        case "rock":
+            if (computerChoice == "scissors") {
+                let win_result = document.createTextNode("Nice! Rock beats Scissors");
+                result_announcement.append(win_result);
+            } else if (computerChoice == "paper") {
+                let win_result = document.createTextNode("Sorry Paper beats Rock");
+                result_announcement.append(win_result);
+            }
+            else {
+                let win_result = document.createTextNode("You both picked Rock try again!");
+                result_announcement.append(win_result);
+            }
+        break;
+        case "paper":
+            if (computerChoice== "rock") {
+                let win_result = document.createTextNode("Nice! Paper beats Rock");
+                result_announcement.append(win_result);
+            } else if (computerChoice == "scissors") {
+                let win_result = document.createTextNode("Sorry Scissors beats Paper");
+                result_announcement.append(win_result);
+            }
+            else {
+                let win_result = document.createTextNode("You both picked Paper try again!");
+                result_announcement.append(win_result);
+            }
+        break;
+        case "scissors":
+            if (computerChoice == "paper") {
+                let win_result = document.createTextNode("Nice! Scissors beats paper");
+                result_announcement.append(win_result);
+            } else if (computerChoice == "rock") {
+                let win_result = document.createTextNode("Sorry Rock beats Scissors");
+                result_announcement.append(win_result);
+            }
+            else {
+                let win_result = document.createTextNode("You both picked Scissors try again!");
+                result_announcement.append(win_result);
+            }
+        break;
+    }
+    main_container.appendChild(result_announcement);
+    setTimeout(RemoveResults, 1000);
+}
+
+
+function GameOver(event) {
+    const player_score = parseInt(document.querySelector(".player_score").textContent);
+    const opponent_score = parseInt(document.querySelector(".opp_score").textContent);
+    const main_container = document.querySelector(".main-content");
+    let result_announcement = document.createElement("p");
+    result_announcement.classList.add("results");
+    if (player_score == 5) {
+        let win_result = document.createTextNode("Congrats you won! Do you want to play again?");
+        result_announcement.append(win_result);
+        main_container.appendChild(result_announcement);
+        AddPlayAgainButton();
+        return true;
+    } else if (opponent_score == 5) {
+        let loss_result = document.createTextNode("Unfortunately you lost! Do you want to play again?");
+        result_announcement.append(loss_result);
+        main_container.appendChild(result_announcement);
+        AddPlayAgainButton();
+        return true;
+    }
+    return false;
+}
+
 
 
 //addAudio after play button
 function addAudio() {
     const audio = document.querySelector("audio");
+    audio.currentTime = 0;
     audio.play();
     console.log("playing");
 }
@@ -82,15 +162,16 @@ function removeAllChildNodes() {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
+    let body = document.querySelector("body");
+    body.style.background = "none";
+    body.style.backgroundColor = "#5151FF"
 }
 
 //Transition to show GameUI
 function Transition() {
-    //Remove the audio and change DOM elements
-    setTimeout(removeAudio, 8000);
     //Take out the nodes once the music is finished
-    setTimeout(removeAllChildNodes, 6000);
-    setTimeout(GameUi, 6000);
+    setTimeout(removeAllChildNodes, 9000);
+    setTimeout(GameUi, 9000);
 }
 
 function AddScoreNodes() {
@@ -127,57 +208,107 @@ function AddScoreNodes() {
      main_container.appendChild(div_holder);
 
      //Change display-flex of main-container
-     main_container.style.cssText = "justify-content: flex-start; border: none; align-items: center; gap: 300px; width:100%";
+     main_container.style.cssText = "justify-content: flex-start; border: none; align-items: center; gap: 125px; width:100%";
      div_holder.style.cssText = "justify-content: space-around; width: 100%; display: flex";
 }
 
 function AddChoices() {
 
-    //Make div for buttons
+    //Make div to hold all gifs
     const div_for_buttons = document.createElement("div");
 
-    //Make individual buttons with classes
-    const rock_button = document.createElement("button");
-    const paper_button = document.createElement("button");
-    const scissors_button = document.createElement("button");
+    //create a div for each gif
+    const rock_div = document.createElement("div");
+    rock_div.classList.add("gif");
+    rock_div.textContent = "ROCK";
+    const paper_div = document.createElement("div");
+    paper_div.classList.add("gif");
+    paper_div.textContent = "PAPER";
+    const scissors_div = document.createElement("div");
+    scissors_div.classList.add("gif");
+    scissors_div.textContent = "SCISSORS";
 
-    //Style the buttons
-        //Rock
-        rock_button.textContent = "ROCK";
-        rock_button.classList.add("game-button");
-        rock_button.style.cssText = "width: 200px; height: 50px"
-        //Paper
-        paper_button.textContent = "PAPER";
-        paper_button.classList.add("game-button");
-        paper_button.style.cssText = "width: 200px; height: 50px"
-        //Scissors
-        scissors_button.textContent = "SCISSORS";
-        scissors_button.classList.add("game-button");
-        scissors_button.style.cssText = "width: 200px; height: 50px"
+    //Add CSS to divs
+    rock_div.style.cssText = "width: 450px; font-size: 0; background-image: url(https://media.tenor.com/-oyIGCZSx1YAAAAC/gif.gif); background-repeat: no-repeat; background-size: cover";
+    paper_div.style.cssText = "width: 450px; font-size: 0; background-image: url(https://media.tenor.com/RijtJsuJ8wAAAAAC/mariah-carey-bye.gif); background-repeat: no-repeat; background-size: cover";
+    scissors_div.style.cssText = "width: 450px; font-size: 0; background-image: url(https://media.tenor.com/BW7UMEBNTVUAAAAC/snoop-dogg-peace-sign.gif); background-repeat: no-repeat; background-size: cover";
 
-    //Add them to the div
-    div_for_buttons.append(rock_button, paper_button, scissors_button);
+
+    //Add them to the main div div
+    div_for_buttons.append(rock_div, paper_div, scissors_div);
     const main_container = document.querySelector(".main-content");
     main_container.appendChild(div_for_buttons);
-    div_for_buttons.style.cssText = "align-self: center; display:flex; gap: 60px";
+    div_for_buttons.style.cssText = "align-self: center; justify-content: space-around; width: 100%; height: 400px; display:flex; gap: 60px";
+}
+
+function AddEventListeners() {
+    const gif_div = document.querySelectorAll(".gif");
+    gif_div.forEach(div => {
+        div.addEventListener("click", playRound);
+    })
 }
 
 function GameUi() {
     AddScoreNodes();
     AddChoices();
+    AddEventListeners();
+ }
+
+ function RemoveListeners() {
     const buttons_for_game = document.querySelectorAll(".game-button");
     buttons_for_game.forEach(button => {
-        button.addEventListener("click", playRound);
-    })
-    buttons_for_game.forEach(button => {
-        button.addEventListener("click", (e) => console.log(e.target));
+        button.removeEventListener("click", playRound);
     })
  }
 
+ function AddPlayAgainButton() {
+    const main_container = document.querySelector(".main-content");
+    const play_again_button = document.createElement("button");
+    play_again_button.classList.add("game-button");
+    play_again_button.classList.add("play_again");
+    play_again_button.style.cssText = "width: 200px; height: 50px"
+    play_again_button.textContent = "Play Again";
+    main_container.appendChild(play_again_button);
+    play_again_button.addEventListener("click", Reset, {once: true});
+ }
+
+ function RemoveResults() {
+    let text_results = document.querySelector(".results");
+    while (text_results.firstChild) {
+        text_results.removeChild(text_results.firstChild);
+    }
+    text_results.remove();
+ }
+
+ function Reset() {
+    //Set scores back to 0, remove text nodes, and make buttons clickable again
+
+    //First set scores back to 0
+    const player_score = document.querySelector(".player_score");
+    player_score.textContent = "0";
+    const opponent_score = document.querySelector(".opp_score");
+    opponent_score.textContent = "0";
+
+    //Remove text nodes
+    RemoveResults();
+
+    //Remove play button
+    const main_container = document.querySelector(".main-content");
+    main_container.removeChild(main_container.lastChild);
+   
+
+    //Make buttons clickable again
+    AddEventListeners();
+    //Add Audio
+    addAudio;
+ }
+
+
 //Play Button
-const button = document.querySelector("button");
-button.addEventListener("click", addAudio);
-button.addEventListener("click", Transition);
+const play_button = document.querySelector("#play-button");
+play_button.addEventListener("click", addAudio, {once: true});
+play_button.addEventListener("click", Transition, {once: true});
+
 
 //Need to add event listener for when buttons are picked
 
