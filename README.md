@@ -1,2 +1,2 @@
 # Rock-Paper-Scissors
-This project is focused on the usage of javascript in order to develop a rock-paper-scissors game
+This project mainly relied on javascript for the establishment of a CPU vs. USER-based Tic Tac Toe Game with some comedic aspects as well.
